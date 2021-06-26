@@ -12,8 +12,15 @@
     {Name: "Fritz", Memberships: ["data-analytics"]}
 ]
 
+#SomeOtherOrgMembers: #Users & [
+    {Name: "Helen", Memberships: ["platform-engineering"]},
+    {Name: "Anton", Memberships: ["platform-engineering"]},
+    {Name: "John", Memberships: ["platform-engineering"]},
+    {Name: "Fritz", Memberships: ["data-analytics"]}
+]
+
 #context: {
-    members: #SomeOrgMembers
+    members: #Users
     
     teams: #Team
 }
@@ -21,6 +28,7 @@
 context: [Name=_]: #context
 
 #Team: [Name=_]: {
+
     members: [for _,user in #SomeOrgMembers for _,v in user.Memberships if v == Name {
         name: user.Name
     }]
@@ -29,6 +37,9 @@ context: [Name=_]: #context
 }
 
 context: "some-org": {
+
+    members: #SomeOrgMembers
+
     teams: "data-analytics": {
         repositories: [
         "foo",
@@ -44,6 +55,8 @@ context: "some-org": {
 }
 
 context: "other-org": {
+
+    members: #SomeOtherOrgMembers
     
     teams: "platform-engineering": {
         repositories: [
