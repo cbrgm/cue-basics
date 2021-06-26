@@ -29,7 +29,9 @@ context: [Name=_]: #context
 
 #Team: [Name=_]: {
 
-    members: [for _,user in #SomeOrgMembers for _,v in user.Memberships if v == Name {
+    _memberRef: #Users
+
+    members: [for _,user in _memberRef for _,v in user.Memberships if v == Name {
         name: user.Name
     }]
     
@@ -38,17 +40,20 @@ context: [Name=_]: #context
 
 context: "some-org": {
 
-    members: #SomeOrgMembers
+    let orgMembers = #SomeOrgMembers
 
     teams: "data-analytics": {
+	_memberRef: orgMembers
         repositories: [
         "foo",
         "bar"
         ]
     }
-    
+
     teams: "platform-engineering": {
-        repositories: [
+        _memberRef: orgMembers
+
+	repositories: [
             "something"
         ]
     }
@@ -56,10 +61,12 @@ context: "some-org": {
 
 context: "other-org": {
 
-    members: #SomeOtherOrgMembers
-    
+    let orgMembers = #SomeOtherOrgMembers    
+
     teams: "platform-engineering": {
-        repositories: [
+        _memberRef: orgMembers
+	
+	repositories: [
             "something"
         ]
     }
